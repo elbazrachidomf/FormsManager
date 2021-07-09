@@ -1,0 +1,314 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .bd-callout-left {
+        padding: 1.25rem;
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        border: 1px solid rgba(61, 252, 3,0);
+        border-left-width: .25rem !important;
+        border-radius: .25rem;
+    }
+
+    .bd-callout-active {
+        border: 1px solid rgb(61, 252, 3);
+    }
+
+    .bd-callout-top {
+        padding: 1.25rem;
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        border: 1px solid rgba(103, 58, 183,0);
+        border-top-width: 2rem !important;
+        border-radius: .25rem;
+    }
+
+    .bd-callout-main {
+        border: 1px solid rgb(103, 58, 183);
+    }
+
+    .border-tools {
+        border: 1px solid #5090D4;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .form-control {
+        border: none;
+        border-radius: 0px;
+        background-color: transparent !important;
+        /*opacity:0;*/
+    }
+
+    .k-input {
+        max-width: unset !important;
+    }
+
+    .form-control:focus, .form-control:hover, .form-control:active {
+        /*outline:none;*/
+        box-shadow: none;
+    }
+    /*#FormTitle header{
+        word-wrap:break-word;
+    }*/
+    form button {
+        float: right;
+        position: relative;
+    }
+
+    .mainSection {
+        margin: 0 auto 0 auto;
+        width: 100%;
+        height: 10rem;
+        border: 1px solid black;
+    }
+        /*.mainSection.active:hover{
+        border:5px solid green;
+    }*/
+        .mainSection.active {
+            border: 5px solid green;
+        }
+
+    .border {
+        width: 100%;
+        border: 1px solid black;
+        margin: 1rem auto 1rem auto;
+    }
+</style>
+
+<h2>FORM</h2>
+<hr />
+<div id="MainFormContainer" class="row">
+    @*the left side of the page*@
+    <div class="col col-md-2">
+
+    </div>
+    @*main form*@
+    <div class="col col-md-8 bd-callout-top bd-callout-main">
+        @{Html.RenderAction("FormTitle", "Form");}
+    </div>
+    @*the right side of the page*@
+    <div class="col col-md-2 bd-callout-top border-tools ml">
+        <div class="row mb-5">
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <button id="btnAddNewSection" class="btn btn-secondary" title="Add new section"><i class="fas fa-plus fa-2x"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="row mb-5 border">
+                    <form id="FormSectionDevider" method="post" action="">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                Rows
+                                <input name="rows" type="number" min="1" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                Columns
+                                <input name="columns" type="number" min="1" class="form-control" />
+                            </div>
+                            @*<div class="form-group">*@
+                            <button type="button" class="btn btn-success" title="Divider" id="btnSectionDevider"><i class="fas fa-border-all"></i></button>
+                            @*</div>*@
+                        </div>
+                    </form>
+                </div>
+                <div class="row mb-5">
+                    <div class="col col-md-6">
+                        <from method="POST" action="">
+                            <div class="form-group">
+                                <input id="cmbIconFieldGroup" class="form-control" />
+                            </div>
+                        </from>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-6">
+                        <from method="POST" action="">
+                            <div class="form-group">
+                                <input id="cmbDataField" class="form-control" />
+                            </div>
+                        </from>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-------------------------------- Template for the new section ----------------------------------------------------------------->
+<div id="rowTemplate" class="row hidden">
+    <div class="col col-md-2">
+    </div>
+
+    <div class="col col-md-8 bd-callout-top bd-callout-main">
+        <div class="form-group" onmouseout="removeFocus(this)" onmouseover="setFocus(this)">
+            <h1 class="font-weight-bold " onclick="InfoSectionModifieur(this)">Section title</h1>
+            <input name="Title" type="text" class="form-control hidden" value="" />
+        </div>
+        <div class="form-group ">
+            <h3 class="font-weight-bold " onmouseout="removeFocus(this)" onmouseover="setFocus(this)" onclick="InfoSectionModifieur(this)">Section description</h3>
+            <textarea name="Desc" class="form-control hidden"></textarea>
+            <div class="row mainSection" onclick="getSelected(this)">
+                <table>
+                    <thead>
+
+                    </thead>
+                     <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button class="btn btn-secondary" onclick="DeleteClone(this)" title="Delete this"><i class="fas fa-minus fa-2x"></i></button>
+    </div>
+
+    <div class="col col-md-2">
+    </div>
+</div>
+
+<!--------------------------------------------------kendo template--------------------------------------------------->
+<script id="tmpcmbIconFieldGroup" type="text/x-kendo-template">
+    <span>
+        <i class="#:className#"></i>
+        #:label#
+    </span>
+</script>
+<script id="tmpcmbDataField" type="text/x-kendo-template">
+    <span>
+        #:type#
+    </span>
+</script>
+<script>
+    //******************* section devider***************
+    $("#btnSectionDevider").click(() => {
+
+        sectionSelected.each(() => {
+
+
+        });
+    });
+    //******************** select section ****************
+    let sectionSelected = [];
+    function getSelected(e) {
+        debugger;
+        let id = $(e).attr("id");
+        if (sectionSelected.indexOf(id)==-1) {
+            sectionSelected.push(id);
+        }
+        if ($(e).hasClass("active")) {
+            $(e).removeClass("active");
+        } else {
+            $(e).addClass("active");
+        }
+    }
+    //******************** remove clone *******************
+    function DeleteClone(e) {
+        $(e).parent().parent().remove();
+    }
+
+    //******************** Add new section ******************
+    $("#btnAddNewSection").click(() => {
+        let DivTemplate = $("#rowTemplate").clone();
+        let id = DivTemplate.attr("id");
+        let mainSection = DivTemplate.find(".mainSection");
+        DivTemplate.attr("id", id + Date.now());
+        mainSection.attr("id", DivTemplate.attr("id") + "mainSection");
+        DivTemplate.removeClass("hidden");
+        $("#MainFormContainer").after(DivTemplate);
+    });
+    //********* combo Fieldgroups with icons *****************
+
+    var cmbIconFieldGroup = $("#cmbIconFieldGroup").kendoComboBox({
+        dataSource: DscmbDataIconFieldGroup,
+        dataValueField: "key",
+        dataTextField: "label",
+        template: kendo.template($("#tmpcmbIconFieldGroup").html()),
+        change: function () {
+            console.log(this.value());
+            let filterFieldBy = [];
+            filterFieldBy.push({ field: "key", operator: "eq", value: this.value() });
+            cmbDataField.dataSource.filter(filterFieldBy);
+        }
+    }).data("kendoComboBox");
+
+    //*********combo Field with icons*****************
+    var cmbDataField = $("#cmbDataField").kendoComboBox({
+        dataSource: DscmbDataField,
+        dataTextField: "type",
+        dataValueField: "type",
+        template: kendo.template($("#tmpcmbDataField").html()),
+        change: function () {
+            //console.log(this.value());
+        }
+
+    }).data("kendoComboBox");
+
+
+    //******************* kendo text box ************************
+    $("#txtDuration").kendoNumericTextBox({
+        format: "# minutes",
+    });
+    $("#FormSectionDevider input[type='number']").each((i, e) => {
+        $(e).kendoNumericTextBox({
+            format: "#",
+            min: 1
+        });
+    });
+
+    //*********toggling data from controller to an other*********
+    $("#FormTitle :header").click(function (e) {
+        let header = $(this);
+        let nextInput = header.next();
+        header.hide();
+        nextInput.val(header.html());
+        nextInput.removeClass("hidden");
+        nextInput.focus();
+        nextInput.blur(function () {
+            $(this).addClass("hidden");
+            header.html($(this).val());
+            header.show();
+        });
+    });
+
+    function InfoSectionModifieur(e) {
+        let header = $(e);
+        let nextInput = header.next();
+        console.log(nextInput);
+        header.hide();
+        nextInput.val(header.html());
+        nextInput.removeClass("hidden");
+        nextInput.focus();
+        nextInput.blur(function () {
+            $(this).addClass("hidden");
+            header.html($(this).val());
+            header.show();
+        });
+    }
+    //*********surrounder each div get hovered by border*********
+    $("#FormTitle div").on({
+        "mouseenter": function () {
+            $(this).addClass("bd-callout-active");
+        },
+        "mouseleave": function () {
+            //if ($(this).index() != 0) {
+            $(this).removeClass("bd-callout-active");
+            // }
+        }
+    });
+
+    function setFocus(e) {
+        $(e).addClass("bd-callout-active");
+    };
+    function removeFocus(e) {
+
+        //if ($(this).index() != 0) {
+        $(e).removeClass("bd-callout-active");
+        // }
+    };
+</script>

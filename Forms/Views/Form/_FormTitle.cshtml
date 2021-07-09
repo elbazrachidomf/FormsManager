@@ -1,0 +1,34 @@
+﻿<form id="FormTitle">
+    <div class="form-group ">
+        <h1 class="font-weight-bold ">Form title</h1>
+        <input name="Title" type="text" class="form-control hidden" value="" />
+    </div>
+    <div class="form-group ">
+        <h3 class="font-weight-bold ">Form description</h3>
+        <textarea name="Desc" class="form-control hidden"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Durration :</label>
+        <input name="Duration" id="txtDuration" class="form-control" type="number" min="1" />
+    </div>
+    <button type="button" data-href="@Url.Action("FormTitle","Form")" class="btn btn-success"><i class="fas fa-thumbtack"></i></button>
+</form>
+<script>
+    $("#FormTitle button").click(function ()
+    {
+        debugger;
+        $.ajax({
+            url: $(this).attr("data-href"),
+            type: "POST",
+            data: $("#FormTitle").serialize(),
+        }).done(() => {
+          
+
+        }).fail(() => {
+
+
+        });
+
+
+    });
+</script>
