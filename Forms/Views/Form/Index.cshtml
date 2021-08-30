@@ -37,12 +37,12 @@
         display: none;
     }
 
-    .form-control {
+    /*.form-control {
         border: none;
         border-radius: 0px;
-        background-color: transparent !important;
-        /*opacity:0;*/
-    }
+        background-color: transparent !important;*/
+    /*opacity:0;*/
+    /*}*/
 
     .k-input {
         max-width: unset !important;
@@ -62,10 +62,22 @@
 
     .mainSection {
         margin: 0 auto 0 auto;
-        width: 100%;
-        height: 10rem;
+        min-width: 70%;
+        min-height: 4rem;
         border: 1px solid black;
+        /*overflow-x:scroll;
+        scrollbar-width: thin;*/
     }
+
+        .mainSection table {
+            width: 100%;
+            height: 100%;
+        }
+
+            .mainSection table td {
+                border: 1px solid black !important;
+                padding: 1rem;
+            }
         /*.mainSection.active:hover{
         border:5px solid green;
     }*/
@@ -78,25 +90,98 @@
         border: 1px solid black;
         margin: 1rem auto 1rem auto;
     }
+
+    #toolsDiv {
+        position: fixed;
+        top: 80%-80px;
+        /*align-self:flex-start;*/
+        right: 4.5rem;
+    }
+
+    .my-5 {
+        /*margin:5rem 0 5rem 0 ;*/
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .edit-buttons {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
+
+    .item-form {
+        position: relative;
+        padding: 10px;
+        border-bottom: 1px solid blue;
+    }
 </style>
 
 <h2>FORM</h2>
 <hr />
-<div id="MainFormContainer" class="row">
-    @*the left side of the page*@
-    <div class="col col-md-2">
+
+<div class="row">
+    <div class="col-md-3">
+        <a class="k-button k-button-icontext k-add-button" href="#"><span class="k-icon k-i-add"></span>Add new record</a>
+        <div id="lvForm"></div>
+    </div>
+    <div class="col-md-9">
 
     </div>
+</div>
+
+<script id="tmpForm" type="text/x-kendo-template">
+    <div class="item-form">
+    #:title#
+        <div class="edit-buttons">
+            <a class="k-button k-edit-button" href="\\#"><span class="k-icon k-i-edit"></span></a>
+            @*<a class="k-button k-delete-button" href="\\#"><span class="k-icon k-i-close"></span></a>*@
+        </div>
+    </div>
+</script>
+
+<script id="tmpEditForm" type="text/x-kendo-template">
+    <div><input data-bind="value: title" class="k-textbox" /></div>
+    <div><textarea data-bind="value: desc" class="k-textbox"></textarea></div>
+    <div><input type="number" data-bind="value: duration" class="k-textbox" /></div>
+    <div class="edit-buttons">
+        <a class="k-button k-update-button" href="\\#"><span class="k-icon k-i-check"></span></a>
+        <a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-i-cancel"></span></a>
+    </div>
+</script>
+
+<script>
+    var lvForm = $("#lvForm").kendoListView({
+        dataSource: DsForms,
+        template: kendo.template($("#tmpForm").html()),
+        editTemplate: kendo.template($("#tmpEditForm").html()),
+    }).data("kendoListView");
+
+    $(".k-add-button").click(function (e) {
+        lvForm.add();
+        e.preventDefault();
+    });
+</script>
+
+
+
+
+
+<div id="MainFormContainer" class="row">
+    @*the left side of the page*@
+    @*<div class="col col-md-2">
+
+        </div>*@
     @*main form*@
-    <div class="col col-md-8 bd-callout-top bd-callout-main">
+    <div class="col col-md-10">
         @{Html.RenderAction("FormTitle", "Form");}
     </div>
-    @*the right side of the page*@
-    <div class="col col-md-2 bd-callout-top border-tools ml">
+    <!-----------------------------------------tools side ------------------------------------------------->
+    <div id="toolsDiv" class="col col-md-2 bd-callout-top border-tools ml">
         <div class="row mb-5">
             <div class="col col-md-6">
                 <div class="form-group">
-                    <button id="btnAddNewSection" class="btn btn-secondary" title="Add new section"><i class="fas fa-plus fa-2x"></i></button>
+                    <button id="btnAddNewSection" data-href="@Url.Action("createSection","Form")" class="btn btn-secondary" title="Add new section"><i class="fas fa-plus fa-2x"></i></button>
                 </div>
             </div>
         </div>
@@ -142,35 +227,25 @@
     </div>
 </div>
 <!-------------------------------- Template for the new section ----------------------------------------------------------------->
-<div id="rowTemplate" class="row hidden">
-    <div class="col col-md-2">
-    </div>
+@*<div id="rowTemplate" class="row hidden">
 
-    <div class="col col-md-8 bd-callout-top bd-callout-main">
-        <div class="form-group" onmouseout="removeFocus(this)" onmouseover="setFocus(this)">
-            <h1 class="font-weight-bold " onclick="InfoSectionModifieur(this)">Section title</h1>
-            <input name="Title" type="text" class="form-control hidden" value="" />
-        </div>
-        <div class="form-group ">
-            <h3 class="font-weight-bold " onmouseout="removeFocus(this)" onmouseover="setFocus(this)" onclick="InfoSectionModifieur(this)">Section description</h3>
-            <textarea name="Desc" class="form-control hidden"></textarea>
-            <div class="row mainSection" onclick="getSelected(this)">
-                <table>
-                    <thead>
-
-                    </thead>
-                     <tbody>
-
-                    </tbody>
-                </table>
+        <div class="col col-md-12 bd-callout-top bd-callout-main">
+            <div class="form-group" onmouseout="removeFocus(this)" onmouseover="setFocus(this)">
+                <h1 class="font-weight-bold " onclick="InfoSectionModifieur(this)">Section title</h1>
+                <input name="Title" type="text" class="form-control hidden" value="" />
             </div>
+            <div class="form-group ">
+                <h3 class="font-weight-bold " onmouseout="removeFocus(this)" onmouseover="setFocus(this)" onclick="InfoSectionModifieur(this)">Section description</h3>
+                <textarea name="Desc" class="form-control hidden"></textarea>
+                <div class="row mainSection" onclick="getSelected(this)">
+                    <table class="table-bordered"></table>
+                </div>
+            </div>
+            <button class="btn btn-secondary" onclick="DeleteClone(this)" title="Delete this"><i class="fas fa-minus fa-2x"></i></button>
         </div>
-        <button class="btn btn-secondary" onclick="DeleteClone(this)" title="Delete this"><i class="fas fa-minus fa-2x"></i></button>
-    </div>
 
-    <div class="col col-md-2">
-    </div>
-</div>
+
+    </div>*@
 
 <!--------------------------------------------------kendo template--------------------------------------------------->
 <script id="tmpcmbIconFieldGroup" type="text/x-kendo-template">
@@ -185,21 +260,52 @@
     </span>
 </script>
 <script>
+    //$(document).ready(() => {
+
+
+    //******************* select the cell in main section ********************
+    $("#mainSection table td").click(() => {
+        //debugger;
+        console.log($(this).index());
+    });
     //******************* section devider***************
     $("#btnSectionDevider").click(() => {
+        if (sectionSelected.length > 0) {
+            let inputs = $("#FormSectionDevider input");
+            let rows = $(inputs[0]).val();
+            let columns = $(inputs[2]).val();
+            let tableShape;
+            if (rows > 0 && columns > 0) {
+                for (let i = 0; i < rows; i++) {
+                    tableShape += "<tr>";
+                    for (let j = 0; j < columns; j++) {
+                        tableShape += "<td>" + j + "</td>";
+                    }
+                    tableShape += "</tr>";
+                }
+                $.each(sectionSelected, (i, e) => {
+                    $("#" + e + " table").append(tableShape);
+                });
 
-        sectionSelected.each(() => {
+            } else {
+                swal("warning", "one or more field are empty!", "warning");
+            }
 
+        } else {
+            swal("warning", "should make a section selection to go forward!", "warning");
 
-        });
+        }
+
     });
     //******************** select section ****************
     let sectionSelected = [];
     function getSelected(e) {
-        debugger;
         let id = $(e).attr("id");
-        if (sectionSelected.indexOf(id)==-1) {
+        if (sectionSelected.indexOf(id) == -1) {
             sectionSelected.push(id);
+        }
+        else {
+            sectionSelected.splice(sectionSelected.indexOf(id), 1);
         }
         if ($(e).hasClass("active")) {
             $(e).removeClass("active");
@@ -213,14 +319,31 @@
     }
 
     //******************** Add new section ******************
-    $("#btnAddNewSection").click(() => {
-        let DivTemplate = $("#rowTemplate").clone();
-        let id = DivTemplate.attr("id");
-        let mainSection = DivTemplate.find(".mainSection");
-        DivTemplate.attr("id", id + Date.now());
-        mainSection.attr("id", DivTemplate.attr("id") + "mainSection");
-        DivTemplate.removeClass("hidden");
-        $("#MainFormContainer").after(DivTemplate);
+    //$("#btnAddNewSection").click(() => {
+    //    let DivTemplate = $("#rowTemplate").clone();
+    //    let id = DivTemplate.attr("id");
+    //    let mainSection = DivTemplate.find(".mainSection");
+    //    DivTemplate.attr("id", id + Date.now());
+    //    mainSection.attr("id", DivTemplate.attr("id") + "mainSection");
+    //    DivTemplate.removeClass("hidden");
+    //    $("#MainFormContainer").after(DivTemplate);
+    //});
+
+    $("#btnAddNewSection").click(function () {
+
+        $.ajax({
+            url: $(this).attr("data-href"),// URLROOT + "Form/createSection",
+            type: "POST",
+            data: {
+                formId: $("#FormTitle input[name='ID']").val()
+            },
+            success: function (response) {
+                if (!response.success) {
+                    swal("warning", "You should pin the form title before you can move forward", "warning");
+                }
+
+            }
+        });
     });
     //********* combo Fieldgroups with icons *****************
 
@@ -291,16 +414,16 @@
         });
     }
     //*********surrounder each div get hovered by border*********
-    $("#FormTitle div").on({
-        "mouseenter": function () {
-            $(this).addClass("bd-callout-active");
-        },
-        "mouseleave": function () {
-            //if ($(this).index() != 0) {
-            $(this).removeClass("bd-callout-active");
-            // }
-        }
-    });
+    //$("#FormTitle div").on({
+    //    "mouseenter": function () {
+    //        $(this).addClass("bd-callout-active");
+    //    },
+    //    "mouseleave": function () {
+    //        //if ($(this).index() != 0) {
+    //        $(this).removeClass("bd-callout-active");
+    //        // }
+    //    }
+    //});
 
     function setFocus(e) {
         $(e).addClass("bd-callout-active");
@@ -311,4 +434,6 @@
         $(e).removeClass("bd-callout-active");
         // }
     };
+
+//});
 </script>

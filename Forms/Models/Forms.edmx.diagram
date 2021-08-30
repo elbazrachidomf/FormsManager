@@ -32,12 +32,24 @@
         <AssociationConnector Association="FormsModel.AspNetUserRoles" ManuallyRouted="false" />
         <AssociationConnector Association="FormsModel.Menu_Role" ManuallyRouted="false" />
         <EntityTypeShape EntityType="FormsModel.FormGroup" Width="1.5" PointX="7.375" PointY="9.75" />
-        <EntityTypeShape EntityType="FormsModel.From" Width="1.5" PointX="9.625" PointY="9.5" />
-        <AssociationConnector Association="FormsModel.FK__From__IdGroup__5CD6CB2B" />
         <EntityTypeShape EntityType="FormsModel.DataField" Width="1.5" PointX="14.25" PointY="9.625" />
         <EntityTypeShape EntityType="FormsModel.DataIconFieldGroup" Width="1.5" PointX="12.125" PointY="9.5" />
         <AssociationConnector Association="FormsModel.FK__DataField__Key__628FA481" />
-      </Diagram>
+        <EntityTypeShape EntityType="FormsModel.Section" Width="1.5" PointX="11.875" PointY="12.75" />
+        <EntityTypeShape EntityType="FormsModel.Form" Width="1.5" PointX="9.625" PointY="10.5" />
+        <AssociationConnector Association="FormsModel.FK__Form__IdGroup__76969D2E" />
+        <AssociationConnector Association="FormsModel.FK__Section__FormId__797309D9" />
+        <EntityTypeShape EntityType="FormsModel.FieldGroup" Width="1.5" PointX="16.375" PointY="13" />
+        <EntityTypeShape EntityType="FormsModel.Question" Width="1.5" PointX="14.125" PointY="12.875" />
+        <AssociationConnector Association="FormsModel.FK__FieldGrou__Quest__160F4887" />
+        <AssociationConnector Association="FormsModel.FK__Question__Sectio__1332DBDC" />
+        <EntityTypeShape EntityType="FormsModel.QType" Width="1.5" PointX="12.5" PointY="4" />
+        <EntityTypeShape EntityType="FormsModel.PreparedGroupField" Width="1.5" PointX="14.625" PointY="0.875" />
+        <EntityTypeShape EntityType="FormsModel.PreparedQuestion" Width="1.5" PointX="12.375" PointY="1.125" />
+        <AssociationConnector Association="FormsModel.FK__PreparedG__Prepa__3587F3E0" />
+        <EntityTypeShape EntityType="FormsModel.PreparedFiled" Width="1.5" PointX="16.875" PointY="1" />
+        <AssociationConnector Association="FormsModel.FK__PreparedF__Prepa__3D2915A8" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

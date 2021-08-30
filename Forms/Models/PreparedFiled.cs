@@ -12,14 +12,12 @@ namespace Forms.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class From
+    public partial class PreparedFiled
     {
         public int ID { get; set; }
-        public string Title { get; set; }
-        public int Duration { get; set; }
-        public Nullable<int> IdGroup { get; set; }
-        public string Desc { get; set; }
+        public string Name { get; set; }
+        public Nullable<int> PreparedGroupFieldID { get; set; }
     
-        public virtual FormGroup FormGroup { get; set; }
+        public virtual PreparedGroupField PreparedGroupField { get; set; }
     }
 }

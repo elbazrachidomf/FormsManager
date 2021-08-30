@@ -41,8 +41,15 @@ namespace Forms.Models
         public virtual DbSet<UNITE> UNITE { get; set; }
         public virtual DbSet<user_history> user_history { get; set; }
         public virtual DbSet<FormGroup> FormGroup { get; set; }
-        public virtual DbSet<From> From { get; set; }
         public virtual DbSet<DataField> DataField { get; set; }
         public virtual DbSet<DataIconFieldGroup> DataIconFieldGroup { get; set; }
+        public virtual DbSet<Section> Section { get; set; }
+        public virtual DbSet<Form> Form { get; set; }
+        public virtual DbSet<FieldGroup> FieldGroup { get; set; }
+        public virtual DbSet<Question> Question { get; set; }
+        public virtual DbSet<QType> QType { get; set; }
+        public virtual DbSet<PreparedGroupField> PreparedGroupField { get; set; }
+        public virtual DbSet<PreparedQuestion> PreparedQuestion { get; set; }
+        public virtual DbSet<PreparedFiled> PreparedFiled { get; set; }
     }
 }

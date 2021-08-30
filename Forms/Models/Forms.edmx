@@ -123,6 +123,24 @@
           <Property Name="ext" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="type" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="FieldGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="250" />
+          <Property Name="QuestionID" Type="int" />
+        </EntityType>
+        <EntityType Name="Form">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="250" />
+          <Property Name="Desc" Type="text" />
+          <Property Name="Duration" Type="int" />
+          <Property Name="IdGroup" Type="int" />
+        </EntityType>
         <EntityType Name="FormGroup">
           <Key>
             <PropertyRef Name="ID" />
@@ -130,16 +148,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Desc" Type="text" />
           <Property Name="Name" Type="varchar" MaxLength="250" />
-        </EntityType>
-        <EntityType Name="From">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Title" Type="varchar" MaxLength="250" Nullable="false" />
-          <Property Name="Duration" Type="int" Nullable="false" />
-          <Property Name="IdGroup" Type="int" />
-          <Property Name="Desc" Type="text" />
         </EntityType>
         <EntityType Name="Menu_Role">
           <Key>
@@ -166,6 +174,55 @@
           <Property Name="FK_ORG" Type="int" Nullable="false" />
           <Property Name="FK_SUP" Type="nvarchar" MaxLength="128" />
           <Property Name="ETAT" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PreparedFiled">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="250" />
+          <Property Name="PreparedGroupFieldID" Type="int" />
+        </EntityType>
+        <EntityType Name="PreparedGroupField">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="250" />
+          <Property Name="PreparedQuestionId" Type="int" />
+        </EntityType>
+        <EntityType Name="PreparedQuestion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Desc" Type="text" />
+        </EntityType>
+        <EntityType Name="QType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="VALUE" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Numbering" Type="int" />
+          <Property Name="Desc" Type="text" />
+          <Property Name="SectionID" Type="int" />
+        </EntityType>
+        <EntityType Name="Section">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="250" />
+          <Property Name="Desc" Type="text" />
+          <Property Name="FormId" Type="int" />
+          <Property Name="Number" Type="int" />
         </EntityType>
         <EntityType Name="SendedMail">
           <Key>
@@ -226,15 +283,87 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__From__IdGroup__5CD6CB2B">
-          <End Role="FormGroup" Type="Self.FormGroup" Multiplicity="0..1" />
-          <End Role="From" Type="Self.From" Multiplicity="*" />
+        <Association Name="FK__FieldGrou__Quest__160F4887">
+          <End Role="Question" Type="Self.Question" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FieldGroup" Type="Self.FieldGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FieldGroup">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Form__IdGroup__76969D2E">
+          <End Role="FormGroup" Type="Self.FormGroup" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Form" Type="Self.Form" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="FormGroup">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="From">
+            <Dependent Role="Form">
               <PropertyRef Name="IdGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PreparedF__Prepa__3D2915A8">
+          <End Role="PreparedGroupField" Type="Self.PreparedGroupField" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PreparedFiled" Type="Self.PreparedFiled" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PreparedGroupField">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PreparedFiled">
+              <PropertyRef Name="PreparedGroupFieldID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PreparedG__Prepa__3587F3E0">
+          <End Role="PreparedQuestion" Type="Self.PreparedQuestion" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PreparedGroupField" Type="Self.PreparedGroupField" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PreparedQuestion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PreparedGroupField">
+              <PropertyRef Name="PreparedQuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Question__Sectio__1332DBDC">
+          <End Role="Section" Type="Self.Section" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Question" Type="Self.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Section">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Section__FormId__797309D9">
+          <End Role="Form" Type="Self.Form" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Section" Type="Self.Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="FormId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -397,11 +526,18 @@
           <EntitySet Name="DynMenu" EntityType="Self.DynMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Etat" EntityType="Self.Etat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Extension" EntityType="Self.Extension" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FieldGroup" EntityType="Self.FieldGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Form" EntityType="Self.Form" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FormGroup" EntityType="Self.FormGroup" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="From" EntityType="Self.From" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_Role" EntityType="Self.Menu_Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ObjectMail" EntityType="Self.ObjectMail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ORGANISATION" EntityType="Self.ORGANISATION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PreparedFiled" EntityType="Self.PreparedFiled" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PreparedGroupField" EntityType="Self.PreparedGroupField" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PreparedQuestion" EntityType="Self.PreparedQuestion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QType" EntityType="Self.QType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Section" EntityType="Self.Section" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SendedMail" EntityType="Self.SendedMail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TypeFichier" EntityType="Self.TypeFichier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UNITE" EntityType="Self.UNITE" Schema="dbo" store:Type="Tables" />
@@ -414,9 +550,29 @@
             <End Role="DataIconFieldGroup" EntitySet="DataIconFieldGroup" />
             <End Role="DataField" EntitySet="DataField" />
           </AssociationSet>
-          <AssociationSet Name="FK__From__IdGroup__5CD6CB2B" Association="Self.FK__From__IdGroup__5CD6CB2B">
+          <AssociationSet Name="FK__FieldGrou__Quest__160F4887" Association="Self.FK__FieldGrou__Quest__160F4887">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="FieldGroup" EntitySet="FieldGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Form__IdGroup__76969D2E" Association="Self.FK__Form__IdGroup__76969D2E">
             <End Role="FormGroup" EntitySet="FormGroup" />
-            <End Role="From" EntitySet="From" />
+            <End Role="Form" EntitySet="Form" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PreparedF__Prepa__3D2915A8" Association="Self.FK__PreparedF__Prepa__3D2915A8">
+            <End Role="PreparedGroupField" EntitySet="PreparedGroupField" />
+            <End Role="PreparedFiled" EntitySet="PreparedFiled" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PreparedG__Prepa__3587F3E0" Association="Self.FK__PreparedG__Prepa__3587F3E0">
+            <End Role="PreparedQuestion" EntitySet="PreparedQuestion" />
+            <End Role="PreparedGroupField" EntitySet="PreparedGroupField" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Question__Sectio__1332DBDC" Association="Self.FK__Question__Sectio__1332DBDC">
+            <End Role="Section" EntitySet="Section" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Section__FormId__797309D9" Association="Self.FK__Section__FormId__797309D9">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="Section" EntitySet="Section" />
           </AssociationSet>
           <AssociationSet Name="FK_AspNetUserLogins_AspNetUsers" Association="Self.FK_AspNetUserLogins_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -817,18 +973,45 @@
             <End Role="DynMenu" EntitySet="DynMenu" />
           </AssociationSet>
           <EntitySet Name="FormGroup" EntityType="FormsModel.FormGroup" />
-          <EntitySet Name="From" EntityType="FormsModel.From" />
-          <AssociationSet Name="FK__From__IdGroup__5CD6CB2B" Association="FormsModel.FK__From__IdGroup__5CD6CB2B">
-            <End Role="FormGroup" EntitySet="FormGroup" />
-            <End Role="From" EntitySet="From" />
-          </AssociationSet>
           <EntitySet Name="DataField" EntityType="FormsModel.DataField" />
           <EntitySet Name="DataIconFieldGroup" EntityType="FormsModel.DataIconFieldGroup" />
           <AssociationSet Name="FK__DataField__Key__628FA481" Association="FormsModel.FK__DataField__Key__628FA481">
             <End Role="DataIconFieldGroup" EntitySet="DataIconFieldGroup" />
             <End Role="DataField" EntitySet="DataField" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="Section" EntityType="FormsModel.Section" />
+          <EntitySet Name="Form" EntityType="FormsModel.Form" />
+          <AssociationSet Name="FK__Form__IdGroup__76969D2E" Association="FormsModel.FK__Form__IdGroup__76969D2E">
+            <End Role="FormGroup" EntitySet="FormGroup" />
+            <End Role="Form" EntitySet="Form" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Section__FormId__797309D9" Association="FormsModel.FK__Section__FormId__797309D9">
+            <End Role="Form" EntitySet="Form" />
+            <End Role="Section" EntitySet="Section" />
+          </AssociationSet>
+          <EntitySet Name="FieldGroup" EntityType="FormsModel.FieldGroup" />
+          <EntitySet Name="Question" EntityType="FormsModel.Question" />
+          <AssociationSet Name="FK__FieldGrou__Quest__160F4887" Association="FormsModel.FK__FieldGrou__Quest__160F4887">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="FieldGroup" EntitySet="FieldGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Question__Sectio__1332DBDC" Association="FormsModel.FK__Question__Sectio__1332DBDC">
+            <End Role="Section" EntitySet="Section" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <EntitySet Name="QType" EntityType="FormsModel.QType" />
+          <EntitySet Name="PreparedGroupField" EntityType="FormsModel.PreparedGroupField" />
+          <EntitySet Name="PreparedQuestion" EntityType="FormsModel.PreparedQuestion" />
+          <AssociationSet Name="FK__PreparedG__Prepa__3587F3E0" Association="FormsModel.FK__PreparedG__Prepa__3587F3E0">
+            <End Role="PreparedQuestion" EntitySet="PreparedQuestion" />
+            <End Role="PreparedGroupField" EntitySet="PreparedGroupField" />
+          </AssociationSet>
+          <EntitySet Name="PreparedFiled" EntityType="FormsModel.PreparedFiled" />
+          <AssociationSet Name="FK__PreparedF__Prepa__3D2915A8" Association="FormsModel.FK__PreparedF__Prepa__3D2915A8">
+            <End Role="PreparedGroupField" EntitySet="PreparedGroupField" />
+            <End Role="PreparedFiled" EntitySet="PreparedFiled" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="FormGroup">
           <Key>
             <PropertyRef Name="ID" />
@@ -836,31 +1019,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="From" Relationship="FormsModel.FK__From__IdGroup__5CD6CB2B" FromRole="FormGroup" ToRole="From" />
+          <NavigationProperty Name="Form" Relationship="FormsModel.FK__Form__IdGroup__76969D2E" FromRole="FormGroup" ToRole="Form" />
         </EntityType>
-        <EntityType Name="From">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Duration" Type="Int32" Nullable="false" />
-          <Property Name="IdGroup" Type="Int32" />
-          <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="FormGroup" Relationship="FormsModel.FK__From__IdGroup__5CD6CB2B" FromRole="From" ToRole="FormGroup" />
-        </EntityType>
-        <Association Name="FK__From__IdGroup__5CD6CB2B">
-          <End Type="FormsModel.FormGroup" Role="FormGroup" Multiplicity="0..1" />
-          <End Type="FormsModel.From" Role="From" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FormGroup">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="From">
-              <PropertyRef Name="IdGroup" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="DataField">
           <Key>
             <PropertyRef Name="ID" />
@@ -893,7 +1053,169 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="Section">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FormId" Type="Int32" />
+          <NavigationProperty Name="Form" Relationship="FormsModel.FK__Section__FormId__797309D9" FromRole="Section" ToRole="Form" />
+          <Property Name="Number" Type="Int32" />
+          <NavigationProperty Name="Question" Relationship="FormsModel.FK__Question__Sectio__1332DBDC" FromRole="Section" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Form">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Duration" Type="Int32" />
+          <Property Name="IdGroup" Type="Int32" />
+          <NavigationProperty Name="FormGroup" Relationship="FormsModel.FK__Form__IdGroup__76969D2E" FromRole="Form" ToRole="FormGroup" />
+          <NavigationProperty Name="Section" Relationship="FormsModel.FK__Section__FormId__797309D9" FromRole="Form" ToRole="Section" />
+        </EntityType>
+        <Association Name="FK__Form__IdGroup__76969D2E">
+          <End Type="FormsModel.FormGroup" Role="FormGroup" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FormsModel.Form" Role="Form" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FormGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Form">
+              <PropertyRef Name="IdGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Section__FormId__797309D9">
+          <End Type="FormsModel.Form" Role="Form" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FormsModel.Section" Role="Section" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Section">
+              <PropertyRef Name="FormId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FieldGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="QuestionID" Type="Int32" />
+          <NavigationProperty Name="Question" Relationship="FormsModel.FK__FieldGrou__Quest__160F4887" FromRole="FieldGroup" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Numbering" Type="Int32" />
+          <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SectionID" Type="Int32" />
+          <NavigationProperty Name="FieldGroup" Relationship="FormsModel.FK__FieldGrou__Quest__160F4887" FromRole="Question" ToRole="FieldGroup" />
+          <NavigationProperty Name="Section" Relationship="FormsModel.FK__Question__Sectio__1332DBDC" FromRole="Question" ToRole="Section" />
+        </EntityType>
+        <Association Name="FK__FieldGrou__Quest__160F4887">
+          <End Type="FormsModel.Question" Role="Question" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FormsModel.FieldGroup" Role="FieldGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FieldGroup">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Question__Sectio__1332DBDC">
+          <End Type="FormsModel.Section" Role="Section" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FormsModel.Question" Role="Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Section">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="SectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="QType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="VALUE" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PreparedGroupField">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PreparedQuestionId" Type="Int32" />
+          <NavigationProperty Name="PreparedQuestion" Relationship="FormsModel.FK__PreparedG__Prepa__3587F3E0" FromRole="PreparedGroupField" ToRole="PreparedQuestion" />
+          <NavigationProperty Name="PreparedFiled" Relationship="FormsModel.FK__PreparedF__Prepa__3D2915A8" FromRole="PreparedGroupField" ToRole="PreparedFiled" />
+        </EntityType>
+        <EntityType Name="PreparedQuestion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PreparedGroupField" Relationship="FormsModel.FK__PreparedG__Prepa__3587F3E0" FromRole="PreparedQuestion" ToRole="PreparedGroupField" />
+        </EntityType>
+        <Association Name="FK__PreparedG__Prepa__3587F3E0">
+          <End Type="FormsModel.PreparedQuestion" Role="PreparedQuestion" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FormsModel.PreparedGroupField" Role="PreparedGroupField" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PreparedQuestion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PreparedGroupField">
+              <PropertyRef Name="PreparedQuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PreparedFiled">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PreparedGroupFieldID" Type="Int32" />
+          <NavigationProperty Name="PreparedGroupField" Relationship="FormsModel.FK__PreparedF__Prepa__3D2915A8" FromRole="PreparedFiled" ToRole="PreparedGroupField" />
+        </EntityType>
+        <Association Name="FK__PreparedF__Prepa__3D2915A8">
+          <End Type="FormsModel.PreparedGroupField" Role="PreparedGroupField" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FormsModel.PreparedFiled" Role="PreparedFiled" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PreparedGroupField">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PreparedFiled">
+              <PropertyRef Name="PreparedGroupFieldID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1081,17 +1403,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="From">
-            <EntityTypeMapping TypeName="FormsModel.From">
-              <MappingFragment StoreEntitySet="From">
-                <ScalarProperty Name="Desc" ColumnName="Desc" />
-                <ScalarProperty Name="IdGroup" ColumnName="IdGroup" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DataField">
             <EntityTypeMapping TypeName="FormsModel.DataField">
               <MappingFragment StoreEntitySet="DataField">
@@ -1109,6 +1420,81 @@
                 <ScalarProperty Name="Group" ColumnName="Group" />
                 <ScalarProperty Name="ClassName" ColumnName="ClassName" />
                 <ScalarProperty Name="key" ColumnName="key" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Section">
+            <EntityTypeMapping TypeName="FormsModel.Section">
+              <MappingFragment StoreEntitySet="Section">
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Form">
+            <EntityTypeMapping TypeName="FormsModel.Form">
+              <MappingFragment StoreEntitySet="Form">
+                <ScalarProperty Name="IdGroup" ColumnName="IdGroup" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FieldGroup">
+            <EntityTypeMapping TypeName="FormsModel.FieldGroup">
+              <MappingFragment StoreEntitySet="FieldGroup">
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Question">
+            <EntityTypeMapping TypeName="FormsModel.Question">
+              <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="SectionID" ColumnName="SectionID" />
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="Numbering" ColumnName="Numbering" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QType">
+            <EntityTypeMapping TypeName="FormsModel.QType">
+              <MappingFragment StoreEntitySet="QType">
+                <ScalarProperty Name="VALUE" ColumnName="VALUE" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PreparedGroupField">
+            <EntityTypeMapping TypeName="FormsModel.PreparedGroupField">
+              <MappingFragment StoreEntitySet="PreparedGroupField">
+                <ScalarProperty Name="PreparedQuestionId" ColumnName="PreparedQuestionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PreparedQuestion">
+            <EntityTypeMapping TypeName="FormsModel.PreparedQuestion">
+              <MappingFragment StoreEntitySet="PreparedQuestion">
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PreparedFiled">
+            <EntityTypeMapping TypeName="FormsModel.PreparedFiled">
+              <MappingFragment StoreEntitySet="PreparedFiled">
+                <ScalarProperty Name="PreparedGroupFieldID" ColumnName="PreparedGroupFieldID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

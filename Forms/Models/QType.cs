@@ -12,19 +12,9 @@ namespace Forms.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class FormGroup
+    public partial class QType
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FormGroup()
-        {
-            this.Form = new HashSet<Form>();
-        }
-    
         public int ID { get; set; }
-        public string Desc { get; set; }
-        public string Name { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Form> Form { get; set; }
+        public string VALUE { get; set; }
     }
 }

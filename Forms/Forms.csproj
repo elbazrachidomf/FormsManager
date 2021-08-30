@@ -234,6 +234,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\OrgaController.cs" />
+    <Compile Include="Controllers\PreparedFieldGroupViewModel.cs" />
     <Compile Include="Controllers\ProjetController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -275,14 +276,18 @@
     <Compile Include="Models\Extension.cs">
       <DependentUpon>Forms.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FieldGroup.cs">
+      <DependentUpon>Forms.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Form.cs">
+      <DependentUpon>Forms.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\FormGroup.cs">
       <DependentUpon>Forms.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FormGroupsViewModel.cs" />
     <Compile Include="Models\FormTitleViewModel.cs" />
-    <Compile Include="Models\From.cs">
-      <DependentUpon>Forms.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\FormViewModel.cs" />
     <Compile Include="Models\GlobalViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -318,6 +323,28 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Forms.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\PreparedFieldViewModel.cs" />
+    <Compile Include="Models\PreparedFiled.cs">
+      <DependentUpon>Forms.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PreparedGroupField.cs">
+      <DependentUpon>Forms.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PreparedQuestion.cs">
+      <DependentUpon>Forms.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PreparedQuestionViewModel.cs" />
+    <Compile Include="Models\QType.cs">
+      <DependentUpon>Forms.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Question.cs">
+      <DependentUpon>Forms.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QuestionViewModel.cs" />
+    <Compile Include="Models\Section.cs">
+      <DependentUpon>Forms.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SectionViewModel.cs" />
     <Compile Include="Models\SendedMail.cs">
       <DependentUpon>Forms.tt</DependentUpon>
     </Compile>
@@ -480,11 +507,16 @@
     <Content Include="Views\FormsManager\Index.cshtml" />
     <Content Include="Views\Form\Index.cshtml" />
     <Content Include="Views\Form\_FormTitle.cshtml" />
+    <Content Include="Views\Form\_createSection.cshtml" />
+    <Content Include="Views\FormsManager\_PreparedQuestions.cshtml" />
+    <Content Include="Views\FormsManager\_CreateSection.cshtml" />
+    <Content Include="Views\FormsManager\_CreateQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Projet\Fabrique\" />
     <Folder Include="Views\Extensions\" />
+    <Folder Include="Views\Section\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

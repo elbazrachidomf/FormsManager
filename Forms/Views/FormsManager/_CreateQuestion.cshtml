@@ -1,0 +1,164 @@
+﻿<form id="formAddNewQuestion">
+    <div class="form-group">
+        <input type="text" name="Desc" class="form-control" placeholder="Enter Question Title">
+    </div>
+    <div class="form-group">
+        <label>Choice Type :</label>
+        <input id="AddNewQuestionDropdown" type="number" name="ChoiceId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Fields :</label>
+        <div class="container">
+            <div class="row">
+                <div class="col col-md-4">
+                    <a id="btnAddFieldGroup" class="k-button k-button-icontext k-add-button" href="#"><span class="k-icon k-i-add"></span>new group</a>
+                    <div id="listViewFieldGroup">
+                    </div>
+                    <div class="k-page-wrap">
+                        <div id="FieldGroupPager"></div>
+                    </div>
+                </div>
+                <div class="col col-md-6">
+                    <a id="btnAddField" class="k-button k-button-icontext k-add-button" href="#"><span class="k-icon k-i-add"></span>new field</a>
+                    <div id="listViewField">
+                    </div>
+                    <div class="k-page-wrap">
+                        <div id="FieldPager"></div>
+                        <div class="k-page-wrap">
+                            <div id="FieldPager"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="btnAddNewQuestion" class="btn btn-success">Add</button>
+</form>
+@***************************************** prepared group *****************************************@
+<script id="groupFieldTemplate" type="text/x-kendo-template">
+    <div class="item-form">
+        <div>#:Name #</div>
+        <div class="edit-buttons">
+          <a class="k-button k-edit-button" href="\\#" ><span class="k-icon k-i-edit"></span></a>
+          <a class="k-button k-delete-button" href="\\#" ><span class="k-icon k-i-close"></span></a>
+        </div>
+    </div>
+</script>
+<script id="groupFieldEditTemplate" type="text/x-kendo-template">
+     <div class="product-view k-widget">
+        <div><input type="text" class="k-textbox" data-bind="value:Name" placeholder="Group name" name="Name" required="required" validationMessage="required" />
+        <span data-for="Name" class="k-invalid-msg"></span></div>
+         <div class="edit-buttons">
+          <a class="k-button k-update-button" href="\\#" ><span class="k-icon k-i-check"></span></a>
+          <a class="k-button k-cancel-button" href="\\#" ><span class="k-icon k-i-cancel"></span></a>
+        </div>
+    </div>
+</script>
+@***************************************** prepared field *****************************************@
+<script id="fieldTemplate" type="text/x-kendo-template">
+    <div class="item-form">
+        <div>#:Name #</div>
+        <div class="edit-buttons">
+          <a class="k-button k-edit-button" href="\\#" ><span class="k-icon k-i-edit"></span></a>
+          <a class="k-button k-delete-button" href="\\#" ><span class="k-icon k-i-close"></span></a>
+        </div>
+    </div>
+</script>
+<script id="fieldEditTemplate" type="text/x-kendo-template">
+     <div class="product-view k-widget">
+        <div><input type="text" class="k-textbox" data-bind="value:Name" placeholder="Field name" name="Name" required="required" validationMessage="required" />
+        <span data-for="Name" class="k-invalid-msg"></span></div>
+        <div><input type="number" placeholder="group" data-bind="value: PreparedGroupFieldID" data-source="DsListViewGroupField" data-text-field="Name" data-value-field="ID" data-role="dropdownlist" /></div>
+         <div class="edit-buttons">
+          <a class="k-button k-update-button" href="\\#" ><span class="k-icon k-i-check"></span></a>
+          <a class="k-button k-cancel-button" href="\\#" ><span class="k-icon k-i-cancel"></span></a>
+        </div>
+    </div>
+</script>
+
+
+<script>
+    //********************************* prepared field group ****************************
+    let lvFieldGroup = $("#listViewFieldGroup").kendoListView({
+        dataSource: DsListViewGroupField,
+        pageable: true,
+        selectable: "single",
+        change: function () {
+            let data = DsListViewGroupField.view();
+            selected = $.map(this.select(), function (item) {
+                return data[$(item).index()].id;
+            });
+            var idGroupe = selected[0];
+            DsListViewField.read({ idGroupe: idGroupe });
+            DsListViewField.filter({ field: "PreparedGroupFieldID", operator: "eq", value: idGroupe });
+
+        },
+        template: kendo.template($("#groupFieldTemplate").html()),
+        editTemplate: kendo.template($("#groupFieldEditTemplate").html())
+    }).data("kendoListView");
+    $("#FieldGroupPager").kendoPager({
+        dataSource: DsListViewGroupField
+    });
+    $("#btnAddFieldGroup").click(function (e) {
+        lvFieldGroup.add();
+        e.preventDefault();
+    });
+    //************************************ prepared field ******************************************************
+    let lvField = $("#listViewField").kendoListView({
+        dataSource: DsListViewField,
+        pageable: true,
+        change: function () {
+            //let data = DsListViewGroupField.view();
+            //selected = $.map(this.select(), function (item) {
+            //    return data[$(item).index()].id;
+            //});
+            //var idGroupe = selected[0];
+            //DsForms.read({ idGroupe: idGroupe });
+            /* DsForms.filter({ field: "IdGroup", operator: "eq", value: idGroupe });*/
+
+        },
+        template: kendo.template($("#fieldTemplate").html()),
+        editTemplate: kendo.template($("#fieldEditTemplate").html())
+    }).data("kendoListView");
+    $("#fieldPager").kendoPager({
+        dataSource: DsListViewField
+    });
+    $("#btnAddField").click(function (e) {
+        lvField.add();
+        e.preventDefault();
+    });
+
+
+
+    //-**************************************************************************************************
+
+    $("#AddNewQuestionDropdown").kendoDropDownList({
+
+        dataSource: {
+            transport: {
+                read: URLROOT + "FormsManager/GetQuestionType",
+                type: "json"
+            }
+        },
+        dataTextField: "Value",
+        dataValueField: "Id",
+        change: function () {
+            console.log(this.value);
+        }
+
+    });
+    $("#btnAddNewQuestion").click(function () {
+        $.ajax({
+            url: URLROOT + "FormsManager/CreateQuestion",
+            data: $("#formAddNewQuestion").serialize(),
+            type: "POST",
+            success: function () {
+                /* wndCreateSection.close();*/
+
+                alert("u did well");
+                DsListViewSection.read({ idForm: null });
+            }
+        });
+
+    });
+</script>

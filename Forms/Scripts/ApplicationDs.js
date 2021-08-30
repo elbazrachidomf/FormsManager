@@ -128,53 +128,35 @@ var DsPieces_J = new kendo.data.DataSource({
 });
 //_________________________________________ DsForms :
 
-var DsForms = new kendo.data.DataSource({
-    type: "aspnetmvc-ajax",
-    transport: {
-        read: {
-            url: URLROOT + "Forms/ReadForms",
-            type: "GET",
-        },
-        update: {
-            url: URLROOT + "Forms/UpdateDepense",
-            type: "POST",
-        },
-        destroy: {
-            url: URLROOT + "Forms/DestroyDepense",
-            type: "POST",
-        },
-
-        create: {
-            url: URLROOT + "Forms/CreateDepense",
-            type: "POST",
-        },
-    },
-    schema: {
-        model: {
-            fields: {
-                idDepense: { type: "number" },
-                idDonneur: { type: "string" },
-                credit: { type: "number" },
-                idPrenneur: { type: "string" },
-                debit: { type: "number" },
-                date: { type: "date", },
-                solde: { type: "number" },
-                typeDepense: { type: "number" },
-                description/*Dp*/: { type: "string" },
-                hasFiles: { type: "boolean" }
-                //descriptionAlm: {type: "string"}
-            }
-        }
-    },
-    group: { field: "idUser" },
-    //requestEnd: function (e) {
-    //    //localStorage.setItem("solde", e.response[0].solde);
-    //    if (e.response.length != 0)
-    //        sessionStorage.setItem("solde", e.response[0].solde);
-    //    else
-    //        sessionStorage.setItem("solde", "0.00");
-    //}
-});
+//var DsForms = new kendo.data.DataSource({
+//    type: "aspnetmvc-ajax",
+//    transport: {
+//        read: {
+//            url: URLROOT + "Form/ReadForms",
+//            type: "GET",
+//        },
+//        create: {
+//            url: URLROOT + "Form/CreateForm",
+//            type: "POST",
+//        },
+//        update: {
+//            url: URLROOT + "Form/UpdateForm",
+//            type: "POST",
+//        },
+//    },
+//    batch: true,
+//    schema: {
+//        model: {
+//            id: "id",
+//            fields: {
+//                id: { type: "number" },
+//                title: { type: "string" },
+//                desc: { type: "string" },
+//                duration: { type: "number" }
+//            }
+//        }
+//    }
+//});
 //________________________________________ refresheSolde :
 
 function refresheSolde() {
@@ -459,7 +441,7 @@ function hideLoad() {
     kendo.ui.progress($("body"), false);
 }
 
-
+//*******************************************************************************************************************************************
 //****** data source for CmbIconFieldGroup**********
 
 var DscmbDataIconFieldGroup = new kendo.data.DataSource({
@@ -480,4 +462,287 @@ var DscmbDataField = new kendo.data.DataSource({
             type: "GET"
         }
     }
+});
+
+//********************** data source for listView form group**********************************************
+
+var DsListViewFormGroup = new kendo.data.DataSource({
+    transport: {
+        read: {
+            url: URLROOT + "FormsManager/GetFormGroups",
+            type: "GET"
+        },
+        update: {
+            url: URLROOT + "FormsManager/UpdateGroup",
+            type: "POST"
+        },
+        destroy: {
+            url: URLROOT + "FormsManager/DeleteGroup",
+            type: "POST"
+        },
+        create: {
+            url: URLROOT + "FormsManager/CreateGroup",
+            type: "POST"
+        },
+
+    },
+    pageSize:5,
+    schema: {
+        model: {
+            id: "id",
+            fields: {
+                id: { type: "number", editable: false },
+                name: { type: "string", editable: true },
+                desc: { type: "string", editable: true }
+            }
+        }
+
+    }
+
+});
+//*************************************************Ds for listview form**********************************************
+var DsForms = new kendo.data.DataSource({
+    transport: {
+        read: {
+            url: URLROOT + "FormsManager/GetForms",
+            type: "GET",
+        },
+        create: {
+            url: URLROOT + "FormsManager/CreateForm",
+            type: "POST",
+        },
+        update: {
+            url: URLROOT + "FormsManager/UpdateForm",
+            type: "POST",
+        },
+        destroy: {
+            url: URLROOT + "FormsManager/DeleteForm",
+            type: "POST"
+        },
+    },
+    pageSize:5,
+    schema: {
+        model: {
+            id: "id",
+            fields: {
+                id: { type: "number", editable: false },
+                title: { type: "string" },
+                desc: { type: "string" },
+                duration: { type: "number" },
+                IdGroup: { type: "number" },
+                groupName: { type: "string" }
+            }
+        }
+    }
+    
+});
+//**************************************Ds for list view  section***************************************** 
+
+//var DsListViewSection = kendo.observable({
+//    isVisible: true,
+//    onSave: function (e) {
+//        console.log("event :: save(" + kendo.stringify(e.model, null, 4) + ")");
+//    },
+//    sections: new kendo.data.DataSource({
+//        schema: {
+//            model: {
+//                id: "ID",
+//            }
+//        },
+//        transport: {
+//            read: {
+//                url: URLROOT + "FormsManager/GetSection",
+//                type: "GET"
+//            },
+//            create: {
+//                url: URLROOT + "FormsManager/CreateSection",
+//                type: "POST"
+//            },
+//            update: {
+//                url: URLROOT + "FormsManager/UpdateSection",
+//                type: "POST"
+//            },
+//            destroy: {
+//                url: URLROOT + "FormsManager/DeleteSection",
+//                type: "POST"
+//            },
+//        }
+//    })
+//});
+
+
+
+
+////*******************old******************************
+var DsListViewSection = new kendo.data.DataSource({
+    transport: {
+        read: {
+            url: URLROOT + "FormsManager/GetSection",
+            type: "GET"
+        },
+        create: {
+                url: URLROOT + "FormsManager/CreateSection",
+                type:"POST"
+        },
+        update: {
+            url: URLROOT + "FormsManager/UpdateSection",
+            type:"POST"
+        },
+        destroy: {
+            url: "FormsManager/DeleteSection",
+            type:"POST"
+        }
+    },
+    schema: {
+        model: {
+            id: "ID",
+            fields: {
+                ID: { type: "number", editable: false },
+                Title: { type: "string" },
+                Desc: { type: "string" },
+                FormId: { type: "number" },
+                fTitle: { type: "string" }
+            }
+        }
+    }
+
+});
+
+//**************************************Ds for list view Question***************************************** 
+//var DsListViewQuestion = new kendo.data.DataSource({
+//    transport: {
+//        read: {
+//            url: URLROOT + "FormsManager/GetPreparedQuestions",
+//            type: "GET"
+//        },
+//        create: {
+//            url: URLROOT + "FormsManager/CreateQuestion",
+//            type: "POST"
+//        },
+//        update: {
+//            url: URLROOT + "FormsManager/UpdateQuestion",
+//            type: "POST"
+//        },
+//        destroy: {
+//            url: "FormsManager/DeleteQuestion",
+//            type: "POST"
+//        }
+//    },
+//    schema: {
+//        model: {
+//            id: "ID",
+//            fields: {
+//                ID: { type: "number", editable: false },
+//                Numbering: { type: "number" },
+//                Desc: { type: "string" },
+//                SectionID: { type: "number" },
+//                SectionTitle: { type: "string" }
+//            }
+//        }
+//    }
+
+
+
+//});
+//**************************************Ds for list view PreparedQuestion***************************************** 
+var DsListViewPrQuestion = new kendo.data.DataSource({
+    transport: {
+        read: {
+            url: URLROOT + "FormsManager/GetPreparedQuestions",
+            type: "GET"
+        },
+        create: {
+            url: URLROOT + "FormsManager/CreatePreparedQuestion",
+            type: "POST"
+        },
+        update: {
+            url: URLROOT + "FormsManager/UpdatePreparedQuestion",
+            type: "POST"
+        },
+        destroy: {
+            url: "FormsManager/DeletePreparedQuestion",
+            type: "POST"
+        }
+    },
+    schema: {
+        model: {
+            id: "ID",
+            fields: {
+                ID: { type: "number", editable: false },
+                Desc: { type: "string" },
+               
+            }
+        }
+    }
+});
+
+//**************************************Ds for pr group filed****************************************************
+var DsListViewGroupField = new kendo.data.DataSource({
+    transport: {
+        read: {
+            url: URLROOT + "FormsManager/GetPreparedFieldGroups",
+            type: "GET"
+        },
+        update: {
+            url: URLROOT + "FormsManager/UpdatePreparedFieldGroup",
+            type: "POST"
+        },
+        destroy: {
+            url: URLROOT + "FormsManager/DeletePreparedFieldGroup",
+            type: "POST"
+        },
+        create: {
+            url: URLROOT + "FormsManager/CreatePreparedFieldGroup",
+            type: "POST"
+        },
+
+    },
+    pageSize: 5,
+    schema: {
+        model: {
+            id: "ID",
+            fields: {
+                ID: { type: "number", editable: false },
+                Name: { type: "string", editable: true },
+                QuestionID: { type: "number", editable: true }
+            }
+        }
+
+    }
+
+});
+//**************************************Ds for pr filed****************************************************
+var DsListViewField = new kendo.data.DataSource({
+    transport: {
+        read: {
+            url: URLROOT + "FormsManager/GetPreparedField",
+            type: "GET"
+        },
+        update: {
+            url: URLROOT + "FormsManager/UpdatePreparedField",
+            type: "POST"
+        },
+        destroy: {
+            url: URLROOT + "FormsManager/DeletePreparedField",
+            type: "POST"
+        },
+        create: {
+            url: URLROOT + "FormsManager/CreatePreparedField",
+            type: "POST"
+        },
+
+    },
+    pageSize: 5,
+    schema: {
+        model: {
+            id: "ID",
+            fields: {
+                ID: { type: "number", editable: false },
+                Name: { type: "string", editable: true },
+                PreparedGroupFieldID: { type:"number", editable: true }
+            }
+        }
+
+    }
+
 });

@@ -1,0 +1,44 @@
+﻿@model List<Forms.Models.SectionViewModel>
+ @if (Model != null)
+ {
+     foreach (var item in Model)
+     {
+        <div class="col col-md-12 bd-callout-top bd-callout-main">
+            <input type="hidden" value="@item.FormId"/>
+            <div class="form-group" onmouseout="removeFocus(this)" onmouseover="setFocus(this)">
+               <h1 class="font-weight-bold " onclick="InfoSectionModifieur(this)">@(string.IsNullOrEmpty(item.Title)? "Section title" :item.Title) </h1>
+                <input name="Title" type="text" class="form-control hidden" value="" />
+            </div>
+            <div class="form-group ">
+             
+               <h3 class="font-weight-bold " onmouseout="removeFocus(this)" onmouseover="setFocus(this)" onclick="InfoSectionModifieur(this)">@(string.IsNullOrEmpty(item.Desc)? "Section description" :item.Desc)</h3>
+                
+                <textarea name="Desc" class="form-control hidden"></textarea>
+                <div class="row mainSection" onclick="getSelected(this)">
+                    <h2>Question description </h2>
+                    <input name="" type="text" class="form-control hidden" value="" />
+                </div>
+            </div>
+            <button class="btn btn-secondary" onclick="DeleteClone(this)" title="Delete this"><i class="fas fa-minus fa-2x"></i></button>
+        </div>
+     }
+
+ }
+ @*else
+ {
+    <div class="col col-md-12 bd-callout-top bd-callout-main">
+        <div class="form-group" onmouseout="removeFocus(this)" onmouseover="setFocus(this)">
+            <h1 class="font-weight-bold " onclick="InfoSectionModifieur(this)">Section title</h1>
+            <input name="Title" type="text" class="form-control hidden" value="" />
+        </div>
+        <div class="form-group ">
+            <h3 class="font-weight-bold " onmouseout="removeFocus(this)" onmouseover="setFocus(this)" onclick="InfoSectionModifieur(this)">Section description</h3>
+            <textarea name="Desc" class="form-control hidden"></textarea>
+            <div class="row mainSection" onclick="getSelected(this)">
+                <table class="table-bordered"></table>
+            </div>
+        </div>
+        <button class="btn btn-secondary" onclick="DeleteClone(this)" title="Delete this"><i class="fas fa-minus fa-2x"></i></button>
+    </div>
+ }*@
+

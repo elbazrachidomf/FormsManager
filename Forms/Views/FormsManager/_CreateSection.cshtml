@@ -1,0 +1,44 @@
+﻿<form id="formAddNewSection">
+    <div class="form-group">
+        <input type="text" name="Title" class="form-control" placeholder="Enter section Title">
+    </div>
+    <div class="form-group">
+        <textarea name="Desc" class="form-control" placeholder="section descriptrion ..."></textarea>
+    </div>
+    <div class="form-group">
+        <label>Form :</label>
+        <input id="AddNewSectionDropdown" type="number" name="FormId" class="form-control"/>
+    </div>
+    <button id="btnAddNewSection" class="btn btn-success">Add</button>
+</form>
+<script>
+    $("#AddNewSectionDropdown").kendoDropDownList({
+      
+        dataSource: {
+            transport: {
+                read: URLROOT + "FormsManager/GetForms",
+                type: "json"
+            }
+        },
+        dataTextField: "title",
+        dataValueField: "id",
+        change: function () {
+            console.log(this.value);
+        }
+
+    });
+    $("#btnAddNewSection").click(function () {
+        $.ajax({
+            url: URLROOT + "FormsManager/CreateSection",
+            data: $("#formAddNewSection").serialize(),
+            type: "POST",
+            success: function () {
+               /* wndCreateSection.close();*/
+
+                alert("u did well");
+                DsListViewSection.read({ idForm: null });
+            }
+        });
+
+    });
+</script>

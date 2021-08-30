@@ -12,19 +12,21 @@ namespace Forms.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class FormGroup
+    public partial class Question
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FormGroup()
+        public Question()
         {
-            this.Form = new HashSet<Form>();
+            this.FieldGroup = new HashSet<FieldGroup>();
         }
     
         public int ID { get; set; }
+        public Nullable<int> Numbering { get; set; }
         public string Desc { get; set; }
-        public string Name { get; set; }
+        public Nullable<int> SectionID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Form> Form { get; set; }
+        public virtual ICollection<FieldGroup> FieldGroup { get; set; }
+        public virtual Section Section { get; set; }
     }
 }

@@ -1,22 +1,36 @@
-﻿<form id="FormTitle">
-    <div class="form-group ">
-        <h1 class="font-weight-bold ">Form title</h1>
-        <input name="Title" type="text" class="form-control hidden" value="" />
+﻿@model Forms.Models.GlobalViewModel
+
+
+<div id="mainForm" >
+
+    <div id="titleForm" class="bd-callout-top bd-callout-main my-5">
+        <form id="FormTitle">
+            <input name="ID" type="hidden" value="@Model.formTitleViewModel.ID" />
+            <input name="ID" type="hidden" value="@(Model != null && Model.formTitleViewModel != null && Model.formTitleViewModel.ID>0? Model.formTitleViewModel.ID:0 )" />
+            <div class="form-group ">
+                <h1 class="font-weight-bold ">@(Model != null ? Model.formTitleViewModel != null ? Model.formTitleViewModel.Title != null ? Model.formTitleViewModel.Title : "Form title" : "Form title" : "Form title") </h1>
+                <input name="Title" placeholder="Title" type="text" class="form-control hidden k-textbox" value="" />
+            </div>
+            <div class="form-group ">
+                <h3 class="font-weight-bold ">@(Model != null ? Model.formTitleViewModel != null ? Model.formTitleViewModel.Desc != null ? Model.formTitleViewModel.Desc : "Form description" : "Form description" : "Form description")</h3>
+                <textarea name="Desc" placeholder="Description" class="form-control hidden k-textbox"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Durration :</label>
+                <input name="Duration" id="txtDuration" class="form-control" type="number" min="1" value="@(Model != null ? Model.formTitleViewModel != null ? Model.formTitleViewModel.Duration != null ? Model.formTitleViewModel.ID : 0 : 0 : 0)" />
+            </div>
+            <button type="button" data-href="@Url.Action("FormTitle", "Form")" class="btn btn-success"><i class="fas fa-thumbtack"></i></button>
+        </form>
     </div>
-    <div class="form-group ">
-        <h3 class="font-weight-bold ">Form description</h3>
-        <textarea name="Desc" class="form-control hidden"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Durration :</label>
-        <input name="Duration" id="txtDuration" class="form-control" type="number" min="1" />
-    </div>
-    <button type="button" data-href="@Url.Action("FormTitle","Form")" class="btn btn-success"><i class="fas fa-thumbtack"></i></button>
-</form>
+    
+    @{ Html.RenderAction("createSection", "Form");}
+</div>
+
+
 <script>
     $("#FormTitle button").click(function ()
     {
-        debugger;
+        //debugger;
         $.ajax({
             url: $(this).attr("data-href"),
             type: "POST",
@@ -32,3 +46,4 @@
 
     });
 </script>
+

@@ -1,0 +1,64 @@
+﻿@model List<Forms.Models.PreparedQuestionViewModel>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <button id="btnAddNewQuestion" type="button" class="btn btn-success"><i class="fas fa-plus"></i></button>
+    </div>
+    <div class="panel-body" >
+       <div id="listViewQuestion"></div>
+    </div>
+
+    <span class="badge badge-info">Questions test</span>
+</div>
+
+<script id="QuestionTemplate" type="text/x-kendo-template">
+    <div class="item-form">
+        <div>#:Numbering #</div>
+        <div>#:Desc #</div>
+        <div id="#=SectionID #">#:SectionTitle #</div>
+        <div class="edit-buttons">
+            <a class="k-button k-edit-button" href="\\#" ><span class="k-icon k-i-edit"></span></a>
+            <a class="k-button k-delete-button" href="\\#" ><span class="k-icon k-i-close"></span></a>
+        </div>
+    </div>
+</script>
+
+<script id="QuestionEditTemplate" type="text/x-kendo-template">
+    <div class="product-view k-widget">
+        <div><input type="number" min="1" class="k-textbox" data-bind="value:Numbering" name="Numbering" required="required" validationMessage="required" />
+        <span data-for="Numbering" class="k-invalid-msg"></span></div>
+        <div><textarea type="text" class="k-textbox" data-bind="value:Desc" placeholder="Question description" name="Desc" required="required" validationMessage="required"></textarea>
+        <span data-for="Desc" class="k-invalid-msg"></span></div>
+        <div><input type="number"  data-bind="value: SectionID" data-source="DsListViewSection" data-text-field="SectionTitle" data-value-field="id" data-role="dropdownlist" /></div>
+         <div class="edit-buttons">
+          <a class="k-button k-update-button" href="\\#" ><span class="k-icon k-i-check"></span></a>
+          <a class="k-button k-cancel-button" href="\\#" ><span class="k-icon k-i-cancel"></span></a>
+        </div>
+    </div>
+</script>
+
+<script>
+    var lvSection = $("#listViewQuestion").kendoListView({
+        autoBind: false,
+        dataSource: DsListViewQuestion,
+        pageable: true,
+        selectable: "single",
+        chnage: function () {
+            let data = DsListViewQuestion;
+            selected = $.map(this.select(), function (item) {
+                return data[$(item).index()].id;
+            });
+
+        },
+        template: kendo.template($("#QuestionTemplate").html()),
+        editTemplate: kendo.template($("#QuestionEditTemplate").html()),
+    }).data("kendoListView");
+    $("#btnAddQuestion").click(function (e) {
+        lvSection.add();
+        e.preventDefault();
+    });
+
+    //$("#SectionPager").kendoPager({
+    //    dataSource: DsListViewQuestion
+    //});
+</script>

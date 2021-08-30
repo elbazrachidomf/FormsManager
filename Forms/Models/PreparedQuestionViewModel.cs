@@ -5,9 +5,10 @@ using System.Web;
 
 namespace Forms.Models
 {
-    public class GlobalViewModel
+    public class PreparedQuestionViewModel
     {
-       public FormTitleViewModel formTitleViewModel = new FormTitleViewModel();
+        public int ID { get; set; }
+        public string Desc { get; set; }
 
     }
 }
